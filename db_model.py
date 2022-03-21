@@ -2,10 +2,18 @@ from pony.orm import *
 
 db = Database()
 
-class User(db.Entity):
+class Student(db.Entity):
+    reg_no = Required(str)
     name = Required(str)
-    phone = Required(str)
-    age = Required(int)
+    stud_class = Required(str)
+    marks = Set('Marks')
+
+class Marks(db.Entity):
+    student = Required(Student)
+    subject = Required(str)
+    marks = Required(int)
+
+models = {'student': Student, 'marks': Marks}
 
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 

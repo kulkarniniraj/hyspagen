@@ -6,15 +6,16 @@ import {Create, Update} from './updateinfo.js'
 
 // Initialize htm with Preact
 const html = htm.bind(h);
+const COLS = await axios.get('getcols')
 
 function NavBar(props){
-    let routes = ['User\'s List', 'Add User']
+    let routes = [NAME + '\'s List', 'Add ' + NAME]
     console.log(props)
 
     return html `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Users</a>
+            <a class="navbar-brand" href="#">${NAME}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -55,7 +56,7 @@ function App(props){
     }
 
     const onDelete = (id, fn) => {
-        axios.post('/delete', {id: id})
+        axios.post('delete', {id: id})
         .then(resp => {
             fn()
         })

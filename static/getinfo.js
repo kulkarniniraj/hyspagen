@@ -7,7 +7,7 @@ export {List, Show}
 
 async function getList(){
 
-    return axios.get('/getall')
+    return axios.get('getall')
     // return {keys: ['name', 'phone', 'age'], data: [
     //     {name: 'A', phone: '123', age: 23},
     //     {name: 'B', phone: '423', age: 13},
@@ -33,7 +33,7 @@ function List(props){
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6 mt-4">
-                <h2>Users List</h2>
+                <h2>${NAME} List</h2>
                 <table class="table  table-striped p-3">
                     <thead class="table-dark">
                         <tr>
@@ -64,7 +64,7 @@ function Show(props){
     console.log('show:', props)
     let [data, setData] = useState({})
     let getUserData = () => {
-        axios.get(`/get/${props.id}`)
+        axios.get(`get/${props.id}`)
             .then(resp => {
                 console.log('show data:', resp.data.data)
                 setData(resp.data.data)
@@ -78,7 +78,7 @@ function Show(props){
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6 mt-4 ">
-                <h2>User Info</h2>
+                <h2>${NAME} Info</h2>
                 <div class="border border-secondary p-2">
                     <table class="table  table-striped p-3">
                         <tbody>

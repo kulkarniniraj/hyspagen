@@ -6,11 +6,9 @@ const html = htm.bind(h);
 export {Create, Update}
 
 function getFields(){
-    return {
-        name: 'User Name',
-        phone: 'Phone Number',
-        age: 'Age'
-    }
+    let out = {}
+    COLS.forEach(col => {out[col] = col})
+    return out
 }
 
 function Create(props){
@@ -24,7 +22,7 @@ function Create(props){
     const onSubmit = ev => {
         console.log('submitting', state)
         ev.preventDefault()
-        axios.post('/create', state).then(res => {
+        axios.post('create', state).then(res => {
             console.log(res)
             setState({})
 
@@ -43,7 +41,7 @@ function Create(props){
         <div class="row mt-4">
             <div class="col-3"></div>
             <div class='col-5 '>
-                <h2>Add User</h2>
+                <h2>Add ${NAME}</h2>
                 <form class="border border-secondary p-4">
                     <div class="mb-3">
                         ${Object.keys(fields).map(key => html`
@@ -63,7 +61,7 @@ function Create(props){
 function Update(props){
     let [data, setData] = useState({})
     let getUserData = () => {
-        axios.get(`/get/${props.id}`)
+        axios.get(`get/${props.id}`)
             .then(resp => {
                 console.log('update data:', resp.data.data)
                 setData(resp.data.data)
@@ -74,7 +72,7 @@ function Update(props){
     const onSubmit = ev => {
         console.log('submitting', data)
         ev.preventDefault()
-        axios.post('/update', data).then(res => {
+        axios.post('update', data).then(res => {
 
         }).catch(err => {
             console.log(err.response)
@@ -94,7 +92,7 @@ function Update(props){
         <div class="row mt-4">
             <div class="col-3"></div>
             <div class='col-5 '>
-                <h2>Update User</h2>
+                <h2>Update ${NAME}</h2>
                 <form class="border border-secondary p-4">
                     <div class="mb-3">
                         ${Object.keys(data).filter(key => key != 'id').map(key => html`
