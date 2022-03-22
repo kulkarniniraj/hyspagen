@@ -1,10 +1,11 @@
 (import [pony.orm [*]]
-        [db_model [models]]
-        [flask [Flask request render_template]])
+        ; [db_model [models]]
+        [db_model [*]]
+        [flask [request render_template]]
+        [utils [app]])
 
-(setv app (Flask __name__))
+; (setv app (Flask __name__))
 ; (setv models {"user" User "mobile" Mobile "car" Car})
-
 (defn dissoc-dict [dct key]
   "Separates dict into keyval and rest of dict"
   (setv _t (.copy dct))
@@ -12,6 +13,7 @@
   [_r1 _t])
 
 (defmacro! idx-route [prefix] 
+  (print "creating idx route for " prefix)
   `#@((app.route (+ "/" ~prefix "/"))
        (defn ~g!index [] (render_template "index.html"
                                           :cols (. (. models [~prefix]) _columns_without_pk_)
@@ -83,17 +85,38 @@
           (except [e Exception]
             {"error" 1 "desc" (str e)})))))
 
-(defmacro gen-routes [route]
+(defmacro! main-page [routes]
+  `#@((app.route "/")
+       (defn index [] (render_template
+                        "main.html"
+                        :links (lfor prefix ~routes {"link" f"{prefix}/" "name" f"{prefix}"})))))
+
+(defmacro model-dict [models]
+  `(setv models ~models))
+
+(defmacro gen-routes [routes]
   `(do
+     (main-page ~routes)
+     ~(lfor route routes `[
      (idx-route ~route)
      (getcols-route ~route)
      (create-route ~route)
      (getall-route ~route)
      (getone-route ~route)
      (update-route ~route)
-     (delete-route ~route)))
+     (delete-route ~route)])))
 
-(gen-routes "student")
-(gen-routes "marks")
+(defmacro setup [modeld]
+  `(do
+     (model-dict ~modeld)
+     (gen-routes ~(.keys modeld))))
+
+; (setup {"student" Student "marks" Marks})
+(setup {"student" Student})
+ ; (model-dict {"student" Student "marks" Marks})
+ ; (gen-routes ["student" "marks"])
+
+ ; (gen-routes "marks")
+(print app.url_map)
 (.run app :debug True)
 

@@ -13,7 +13,7 @@ class Marks(db.Entity):
     subject = Required(str)
     marks = Required(int)
 
-models = {'student': Student, 'marks': Marks}
+# models = {'student': Student, 'marks': Marks}
 
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 
