@@ -1,11 +1,9 @@
 (import [pony.orm [*]]
-        ; [db_model [models]]
         [db_model [*]]
         [flask [request render_template]]
-        [utils [app]])
+        [utils [app]]
+        [external_routes [*]])
 
-; (setv app (Flask __name__))
-; (setv models {"user" User "mobile" Mobile "car" Car})
 (defn dissoc-dict [dct key]
   "Separates dict into keyval and rest of dict"
   (setv _t (.copy dct))
@@ -111,12 +109,10 @@
      (model-dict ~modeld)
      (gen-routes ~(.keys modeld))))
 
-; (setup {"student" Student "marks" Marks})
-(setup {"student" Student})
- ; (model-dict {"student" Student "marks" Marks})
- ; (gen-routes ["student" "marks"])
+; EDIT HERE
+; This dict is map of url to table
+(setup {"employee" Employee "expenses" Expense })
 
- ; (gen-routes "marks")
 (print app.url_map)
 (.run app :debug True)
 

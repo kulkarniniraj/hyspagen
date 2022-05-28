@@ -2,19 +2,16 @@ from pony.orm import *
 
 db = Database()
 
-class Student(db.Entity):
-    reg_no = Required(str)
+class Employee(db.Entity):
+    eid = Required(str)
     name = Required(str)
-    stud_class = Required(str)
-    marks = Set('Marks')
+    expenses = Set('Expense')
 
-class Marks(db.Entity):
-    student = Required(Student)
-    subject = Required(str)
-    marks = Required(int)
-
-# models = {'student': Student, 'marks': Marks}
-
+class Expense(db.Entity):
+    emp = Required(Employee)
+    amount = Required(float)
+    reason = Required(str)
+    
 db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 
 db.generate_mapping(create_tables=True)
